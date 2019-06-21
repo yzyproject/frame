@@ -5,8 +5,6 @@ const Router = require('koa-router');
 const router = require("./router");
 app.use(bodyParser())
 router(app)
-let a=5;
-let b = 3;
-app.listen(3000, () => {
-    console.log('demo2 is run 3000 ')
+app.listen(3005, () => {
+    console.log('demo2 is run 3005 ')
 })
