@@ -1,7 +1,8 @@
 const router = require("koa-router")();
+const bodyParser = require('koa-bodyparser')
 const path = require("path");
 const config = require("./config.js");
-const Com = require ( "./api/_common")
+const Com = require ( "./src/api/_common")
 let com = new Com();
 module.exports = (app)=>{
   app.use(async (ctx,next)=>{
@@ -17,9 +18,9 @@ module.exports = (app)=>{
     let url = ctx.path.split("/").filter(p => p!=="");
     let fn = url.pop();  
     url = url.join("")   
-    let fileNames = Com.fileURL('./api');
+    let fileNames = Com.fileURL('./src/api');
     fileNames.map(f => {
-      let pm = f.replace("api\\","").split("\\").join("").split(".")[0];
+      let pm = f.replace("src\\api\\","").split("\\").join("").split(".")[0];
       pageMap[pm] = require("./" + f.replace(/\\/g,"/"))
     })
     router.get('/',async(ctx, next)=>{
