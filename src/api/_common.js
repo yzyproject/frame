@@ -15,7 +15,12 @@ class Common{
                 let fPath=join(path,val);
                 let stats=fs.statSync(fPath);
                 if(stats.isDirectory()) finder(fPath);
-                if(stats.isFile()) result.push(fPath);
+                if(stats.isFile()){
+                    if(fPath.indexOf("\\")>-1){
+                        fPath = fPath.replace(/\\/g,"/")
+                    }
+                    result.push(fPath)
+                };
             });
         }
         finder(startPath);

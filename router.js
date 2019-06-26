@@ -22,6 +22,7 @@ module.exports = (app)=>{
     let fn = url.pop();  
     url = url.join("")   
     let fileNames = Com.fileURL('./src/api');
+    
     fileNames.map(f => {
       let pm = f.replace("src/api/","").split("/").join("").split(".")[0];
       pageMap[pm] = require("./" + f)
@@ -30,7 +31,7 @@ module.exports = (app)=>{
       ctx.response.body = `Hello api！`
     })
     router.post(path,async(ctx, next)=>{
-      new pageMap[url]()[fn](ctx);
+      await new pageMap[url]()[fn](ctx);
     })
     await next()
   })
