@@ -19,6 +19,7 @@ class Server{
     async findOne(options,filter,orderBy,startPops,limit){ 
         var  sql = 'select * from menus where admin_id=1 ORDER BY id desc limit 1,1';
         let res = await this.ConnectDB(sql)
+        return res;
     }
 }
 module.exports = Server;

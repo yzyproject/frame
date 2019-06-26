@@ -15,13 +15,16 @@ module.exports = (app)=>{
     }
     let pathArry = ctx.path.split("/").map(v => v.trim()).filter(v => v.length !== 0)
     let path = ctx.path;
+    if(path.indexOf("\\") > -1){
+      path.replace("\\","/")
+    }
     let url = ctx.path.split("/").filter(p => p!=="");
     let fn = url.pop();  
     url = url.join("")   
     let fileNames = Com.fileURL('./src/api');
     fileNames.map(f => {
-      let pm = f.replace("src\\api\\","").split("\\").join("").split(".")[0];
-      pageMap[pm] = require("./" + f.replace(/\\/g,"/"))
+      let pm = f.replace("src/api/","").split("/").join("").split(".")[0];
+      pageMap[pm] = require("./" + f)
     })
     router.get('/',async(ctx, next)=>{
       ctx.response.body = `Hello api！`
