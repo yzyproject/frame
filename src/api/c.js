@@ -4,9 +4,9 @@ let server = new Server();
 class TestC {
     constructor () {}
     async cc ( ctx ) {
-        let params = ctx.request.body;
+        let {options,filter,orderBy,startPops,limit} = JSON.parse(ctx.request.body);
         let obj = ctx.request.body;
-        let result = await server.findOne();
+        let result = await server.findOne("admin",options,filter,orderBy,startPops,limit);
         let res = {
             status:"success",
             array:result
