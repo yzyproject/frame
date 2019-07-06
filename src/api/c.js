@@ -6,7 +6,7 @@ class TestC {
     async cc ( ctx ) {
         let {options,filter,orderBy,startPops,limit} = JSON.parse(ctx.request.body);
         let obj = ctx.request.body;
-        let result = await server.findOne("admin",options,filter,orderBy,startPops,limit);
+        let result = await server.find("admin",options,filter,orderBy,startPops,limit);
         let res = {
             status:"success",
             array:result
