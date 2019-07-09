@@ -15,7 +15,7 @@ class TestC {
            res = {
                 status:"success",
                 array:result,
-                status:200
+                code:200
             }
         }
         
