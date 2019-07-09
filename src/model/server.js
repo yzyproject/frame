@@ -3,22 +3,17 @@ const config = require("../../config.js");
 const _ = require("underscore");
 const CreatFilter = require("./creat_filter")
 const creatFilter = new CreatFilter();
-class Server{
-    constructor(){}
-    ConnectDB(sql){
-        return new Promise((resolve)=>{
-            var connection = mysql.createConnection(config.mysql); 
-            connection.connect();
-            connection.query(sql,function (err, result) {
-                if(err){
-                    console.log('[SELECT ERROR] - ',err.message);
-                    return;
-                }
-                resolve(result)
-            });
-            connection.end();
-        })
+const DB = require("./db.js")
+class Server extends DB{
+    constructor(){
+        super()
     }
+    // async find(tanleName,options,filter,orderBy,startPops,limit){ 
+    //     var  sql = `select ${options} from ${tanleName} where ${filter} order by ${orderBy} limit ${startPops},${limit}`;
+
+    //     let res = await this.ConnectDB(sql)
+    //     return res;
+    // }
     async find(tablename,options,filter,orderBy,startPops,limits){ 
         let fl = {
             "lf%":"leftLike",
@@ -29,7 +24,6 @@ class Server{
             "<=":"belowOrEqual",
             "between":"between",
         }
-        // let sql = "select "+options+" from "+tablename+" where "
         function filterSring(filters){
             let f= ''
             let keys = _.keys(filters)
@@ -47,7 +41,6 @@ class Server{
             return f;
         }
         let sql = "select "+options+" from "+tablename+" where "+filterSring(filter)+" "
-        // var  sql = 'select * from menus where admin_id=1 ORDER BY id desc limit 1,1';
         let res = await this.ConnectDB(sql)
         return res;
     }
