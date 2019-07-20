@@ -6,25 +6,23 @@ let com = new Com()
 let server = new Server();
 class TestC {
     constructor () {}
-    async login ( ctx ) {
+    async getFunctions ( ctx ) {
         let {options,filter,orderBy,startPops,limit} = JSON.parse(ctx.request.body);
         let agnet =util.inspect(ctx.userAgent)
-        let result = await server.find("admin",options,filter,orderBy,startPops,limit);
+        let result = await server.find("functions",options,filter,orderBy,startPops,limit);
         let res = {};
         let token ="";
         if(result[0]){
-            let token = com.creatToken(ctx,result[0]);
             res = {
                 status:"success",
                 array:result,
-                token:token,
                 code:200
             }
         }else{
             res = {
                 status:"success",
                 code:500,
-                info:"用户名或密码不正确"
+                info:"服务器连接成功，没有查到数据"
             }
         }
         ctx.response.body = res ;

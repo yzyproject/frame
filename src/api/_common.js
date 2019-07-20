@@ -1,5 +1,6 @@
 const fs = require('fs');
 const join = require('path').join;
+const jwt = require('jsonwebtoken');
 class Common{
     constructor(){}
     static fileURL(startPath){
@@ -25,6 +26,16 @@ class Common{
         }
         finder(startPath);
         return result;
+    }
+    creatToken(ctx,user){
+        let token = jwt.sign({
+            name:user.name || "",
+            password:user.password
+        },'yzy012' //自定义内容 ，可以是密钥
+         ,{
+          expiresIn: 60*60 //60秒到期时间
+        });
+        return token;
     }
 }
 module.exports = Common

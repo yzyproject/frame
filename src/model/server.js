@@ -25,8 +25,11 @@ class Server extends DB{
             "between":"between",
         }
         function filterSring(filters){
-            let f= ''
+            let f= ' where '
             let keys = _.keys(filters)
+            if(keys.length<=0){
+                f=""
+            }
             keys.map((k,index)=>{
                 if(filters[k] && filters[k].fl){
                     if(filters[k].fl.indexOf("between")>-1){
@@ -34,13 +37,16 @@ class Server extends DB{
                     }else{
                         f = f + creatFilter.execute(k,fl[filters[k].fl],f,filters[k]) + `${index===keys.length-1?'':' and '}`
                     }
-                }else{
+                }else if(filters[k].target){
                     f = f + `${k}="${filters[k].target}" ${index===keys.length-1?'':'and '}`
+                }else{
+                    f = f + `${k}="${filters[k]}" ${index===keys.length-1?'':'and '}`
                 }
             })
             return f;
         }
-        let sql = "select "+options+" from "+tablename+" where "+filterSring(filter)+" "
+        
+        let sql = "select "+options+" from "+tablename+" "+filterSring(filter)+" "
         let res = await this.ConnectDB(sql)
         return res;
     }
