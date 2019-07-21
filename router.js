@@ -6,6 +6,8 @@ const Com = require ( "./src/api/_common")
 const util = require("util");
 const jwt = require('jsonwebtoken');
 let com = new Com();
+const Server = require("./src/model/server");
+let server = new Server();
 module.exports = (app)=>{
   app.use(async (ctx,next)=>{
     let pageMap = {};
@@ -33,24 +35,21 @@ module.exports = (app)=>{
       ctx.response.body = `Hello api！`
     })
     router.post(path,async(ctx, next)=>{
-      if(pageMap.hasOwnProperty(url )){
+      if(pageMap.hasOwnProperty(url)){
         let pageMapObj =  new pageMap[url]();
-        let token = ctx.header.authorization || ""
-        token = token.replace(/\"/g,"")
         if(typeof pageMapObj[fn] === "function"){
           if(fn === "login"){
             await pageMapObj[fn](ctx);
           }else{
-            jwt.verify(token, 'yzy012', async function (err, decoded) {
-              if (!err){
-                 console.log("====================decoded",decoded.name); //会输出123，如果过了60秒，则有错误。
-                 await pageMapObj[fn](ctx);
-              }else{
-                console.error(err)
-              }
-            })
+            let token = ctx.header.authorization || ""
+            token = token.replace(/\"/g,"")
+            let tokenStatus = await com.checkToken(token)
+            if(tokenStatus === true){
+              await pageMapObj[fn](ctx);
+            }else{
+              ctx.response.body = tokenStatus ;
+            }
           }
-          await pageMapObj[fn](ctx);
         }else{
           console.error("请求的方法不存在")
         }

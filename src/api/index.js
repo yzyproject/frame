@@ -4,13 +4,15 @@ const util = require("util");
 const Com = require ( "./_common")
 let com = new Com()
 let server = new Server();
-class TestC {
+class IndexPage {
     constructor () {}
     async getFunctions ( ctx ) {
         let {options,filter,orderBy,startPops,limit} = JSON.parse(ctx.request.body);
         let agnet =util.inspect(ctx.userAgent)
         let result = await server.find("functions",options,filter,orderBy,startPops,limit);
-        let res = {};
+        let res = {
+            type:"000"
+        };
         let token ="";
         if(result[0]){
             res = {
@@ -28,4 +30,4 @@ class TestC {
         ctx.response.body = res ;
     }
 }
-module.exports = TestC
+module.exports = IndexPage

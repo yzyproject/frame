@@ -8,13 +8,7 @@ class Server extends DB{
     constructor(){
         super()
     }
-    // async find(tanleName,options,filter,orderBy,startPops,limit){ 
-    //     var  sql = `select ${options} from ${tanleName} where ${filter} order by ${orderBy} limit ${startPops},${limit}`;
-
-    //     let res = await this.ConnectDB(sql)
-    //     return res;
-    // }
-    async find(tablename,options,filter,orderBy,startPops,limits){ 
+    async find(tablename,options,filter,orderBy,startPops,limits){  
         let fl = {
             "lf%":"leftLike",
             "rt%":"rightLike",
@@ -45,10 +39,25 @@ class Server extends DB{
             })
             return f;
         }
-        
         let sql = "select "+options+" from "+tablename+" "+filterSring(filter)+" "
         let res = await this.ConnectDB(sql)
         return res;
+    }
+    async addOne(tablename,fields,fieldValue){
+        let fieldsArray = fields.split(",")
+        let fieldValueArray = fieldValue.split(",")
+        let updataValues = "ON DUPLICATE KEY UPDATE "
+        function creatUpdataValues(){
+             fieldsArray.map((f,i)=>{
+                 if(i>0){
+                    updataValues += ""+f+"="+fieldValueArray[i]+""+`${i===fieldValueArray.length-1?'':','}`+""
+                 }
+            })
+        }
+        creatUpdataValues()
+        let sql = "insert into "+tablename+" ("+fields+") values ("+fieldValue+") "+updataValues+" ";
+        let res = await this.ConnectDB(sql)
+        let a = "aa"
     }
 }
 module.exports = Server;

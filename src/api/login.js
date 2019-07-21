@@ -8,16 +8,16 @@ class TestC {
     constructor () {}
     async login ( ctx ) {
         let {options,filter,orderBy,startPops,limit} = JSON.parse(ctx.request.body);
-        let agnet =util.inspect(ctx.userAgent)
+        let agnet = util.inspect(ctx.userAgent)
         let result = await server.find("admin",options,filter,orderBy,startPops,limit);
         let res = {};
         let token ="";
         if(result[0]){
-            let token = com.creatToken(ctx,result[0]);
+            let token = await com.creatToken(ctx,result[0],agnet);
             res = {
                 status:"success",
                 array:result,
-                token:token,
+                token:token || "",
                 code:200
             }
         }else{
