@@ -18,7 +18,7 @@ class Server extends DB{
             "<=":"belowOrEqual",
             "between":"between",
         }
-        function filterSring(filters){
+        function filterString(filters){
             let f= ' where '
             let keys = _.keys(filters)
             if(keys.length<=0){
@@ -37,9 +37,19 @@ class Server extends DB{
                     f = f + `${k}="${filters[k]}" ${index===keys.length-1?'':'and '}`
                 }
             })
+            if(limits){
+                if(startPops){
+                    f = f + "limit "+startPops+","+limits+" "
+                }else{
+                    f = f + "limit "+limits+" "
+                }
+            }
             return f;
         }
-        let sql = "select "+options+" from "+tablename+" "+filterSring(filter)+" "
+        if(!options){
+            options = "*"
+        }
+        let sql = "select "+options+" from "+tablename+" "+filterString(filter)+"  "
         let res = await this.ConnectDB(sql)
         return res;
     }
