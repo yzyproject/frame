@@ -66,7 +66,7 @@ class IndexPage {
             console.log("=============menuObj:",menuObj)
             res = {
                 status:"success",
-                array:result,
+                menuObj:menuObj,
                 code:200
             }
         }else{
