@@ -41,12 +41,12 @@ class IndexPage {
             //一级菜单
             let subFirst = [];
             result.map(r=>{
-                if(r.sub_id && !r.parent_id){
+                if(!r.parent_id){
                     subFirst.push(r)
                 }
             })
             subFirst.map(s=>{
-                getChild(s.sub_id,s,result)
+                getChild(s.id,s,result)
             })
             menuObj.menu = subFirst;
             function getChild(id,menu,menuAll){
@@ -55,7 +55,7 @@ class IndexPage {
                     if(m.parent_id){
                         if(id === m.parent_id){
                             childList.push(m)
-                            getChild(m.sub_id,m,menuAll)
+                            getChild(m.id,m,menuAll)
                         }
                     }
                 })
