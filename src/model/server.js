@@ -54,20 +54,30 @@ class Server extends DB{
         return res;
     }
     async addOne(tablename,fields,fieldValue){
-        let fieldsArray = fields.split(",")
-        let fieldValueArray = fieldValue.split(",")
-        let updataValues = "ON DUPLICATE KEY UPDATE "
-        function creatUpdataValues(){
-             fieldsArray.map((f,i)=>{
-                 if(i>0){
-                    updataValues += ""+f+"="+fieldValueArray[i]+""+`${i===fieldValueArray.length-1?'':','}`+""
-                 }
-            })
-        }
-        creatUpdataValues()
-        let sql = "insert into "+tablename+" ("+fields+") values ("+fieldValue+") "+updataValues+" ";
+        let fieldsArray = fields.replace(" ","").split(",")
+        let fieldValues=[];
+        fieldsArray.map(f=>{
+            fieldValues.push("' "+fieldValue[f]+" '")
+        })
+        fieldValues.join(",")
+        // let fieldValueArray = fieldValue.split(",");
+        // let updataValues = "ON DUPLICATE KEY UPDATE "
+        // function creatUpdataValues(){
+        //      fieldsArray.map((f,i)=>{
+        //          if(i>0){
+        //             fieldValues += ""+fieldValue[f]+"" + ","
+        //             updataValues += ""+f+"="+fieldValueArray[i]+""+`${i===fieldValueArray.length-1?'':','}`+""
+        //          }
+        //     })
+        // }
+        // creatUpdataValues()
+        let sql = "insert into "+tablename+" ("+fields+") values ("+fieldValues+") ";
         let res = await this.ConnectDB(sql)
-        let a = "aa"
+        let result = {
+            status:"success",
+            code:"200"
+        }
+        return result;
     }
 }
 module.exports = Server;

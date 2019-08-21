@@ -81,5 +81,10 @@ class IndexPage {
         //                VALUES
         //                ( "1","sub0004","四级菜单","/page3","user","false","false");
     }
+    async addMenu( ctx ){
+        let {options,fieldValue} = JSON.parse(ctx.request.body);
+        let result = await server.addOne("menu",options,fieldValue);
+        ctx.response.body = result; 
+    }
 }
 module.exports = IndexPage
