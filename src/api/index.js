@@ -86,5 +86,30 @@ class IndexPage {
         let result = await server.addOne("menu",options,fieldValue);
         ctx.response.body = result; 
     }
+
+    async addMenuMany( ctx ){
+        let {fieldValue} = JSON.parse(ctx.request.body);
+        let result = await server.addMany("menu",fieldValue);
+        ctx.response.body = result; 
+    }
+
+    async udateOne( ctx ){
+        let {fieldValue,whereOption} = JSON.parse(ctx.request.body);
+        let result = await server.udateOne("menu",fieldValue,whereOption);
+        ctx.response.body = result; 
+    }
+
+    async getCurryMenu(ctx){
+        let {options,filter,orderBy,startPops,limit} = JSON.parse(ctx.request.body);
+        let result = await server.find("menu",options,filter,orderBy,startPops,limit);
+        let res = {
+            status:"success",
+            data:result[0],
+            code:200
+        }
+        ctx.response.body = res; 
+    }
+
+    
 }
 module.exports = IndexPage

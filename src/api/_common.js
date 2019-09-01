@@ -39,7 +39,11 @@ class Common{
           expiresIn: 60*60*24 //到期时间
         });
         let fields = "id,user_name,user_token";
-        let values = "'"+user.id+"','"+user.name+"','"+token+"'"
+        let values = {
+            id:user.id,
+            user_name:user.name,
+            user_token:token
+        }
         await server.addOne("cache",fields,values);
         return token;
     }

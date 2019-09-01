@@ -57,22 +57,68 @@ class Server extends DB{
         let fieldsArray = fields.replace(" ","").split(",")
         let fieldValues=[];
         fieldsArray.map(f=>{
-            fieldValues.push("' "+fieldValue[f]+" '")
+            fieldValues.push("'"+fieldValue[f]+"'")
         })
         fieldValues.join(",")
-        // let fieldValueArray = fieldValue.split(",");
-        // let updataValues = "ON DUPLICATE KEY UPDATE "
-        // function creatUpdataValues(){
-        //      fieldsArray.map((f,i)=>{
-        //          if(i>0){
-        //             fieldValues += ""+fieldValue[f]+"" + ","
-        //             updataValues += ""+f+"="+fieldValueArray[i]+""+`${i===fieldValueArray.length-1?'':','}`+""
-        //          }
-        //     })
-        // }
-        // creatUpdataValues()
-        let sql = "insert into "+tablename+" ("+fields+") values ("+fieldValues+") ";
+        let updataValues = "ON DUPLICATE KEY UPDATE "
+        function creatUpdataValues(){
+             fieldsArray.map((f,i)=>{
+                 if(i>0){
+                    updataValues += ""+f+"='"+fieldValue[f]+"'"+`${i===fieldsArray.length-1?'':','}`+""
+                 }
+            })
+        }
+        creatUpdataValues()
+        let sql = "insert into "+tablename+" ("+fields+") values ("+fieldValues+") "+updataValues+" ";
         let res = await this.ConnectDB(sql)
+        let result = {
+            status:"success",
+            code:"200"
+        }
+        return result;
+    }
+    //一次插入多条数据
+    async addMany(tablename,fieldValue){
+        let fieldValueKeys=[];
+        let fieldValues=[];
+        let fields = _.keys(fieldValue[0]);
+        fields = fields.join(",");
+        function valueMany(fieldValue){
+            fieldValue.map( f =>{
+                let fv = _.values(f);
+                let fvArray = [];
+                fv.map(v=>{
+                    fvArray.push("'"+v+"'");
+                })
+                fv = "("+fvArray.join(",")+")";
+                fieldValues.push(fv);
+            });
+        };
+        valueMany(fieldValue);
+        // "INSERT INTO [表名]([列名],[列名]) VALUES ([列值],[列值])),([列值],[列值])), ([列值],[列值]));"
+        let sql = "insert into "+tablename+" ("+fields+") values "+fieldValues.join(",")+" ";
+        let res = await this.ConnectDB(sql);
+        let result = {
+            status:"success",
+            code:"200"
+        }
+        return result;
+    }
+    //修改数据
+    async udateOne(tablename,fieldValue,whereOpation){
+        let keys = _.keys(fieldValue);
+        let fieldOption = "";
+        let whereValue = "";
+        keys.map((k,i)=>{
+            fieldOption += `${k}='${fieldValue[k]}'${i===keys.length-1?"":","}`
+        })
+        let whereKeys = _.keys(whereOpation);
+        whereKeys.map((w,i)=>{
+            whereValue += `${w}='${whereOpation[w]}'${i===whereKeys.length-1?"":" end "}`
+        })
+        let values = _.values(fieldValue);
+        let updateSql = `UPDATE  ${tablename} SET ${fieldOption} where ${whereValue}`
+        let res = await this.ConnectDB(updateSql);
         let result = {
             status:"success",
             code:"200"
