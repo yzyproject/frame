@@ -44,7 +44,7 @@ class Common{
             user_name:user.name,
             user_token:token
         }
-        await server.addOne("cache",fields,values);
+        await server.addOne("cache",values);
         return token;
     }
     async checkToken(token){

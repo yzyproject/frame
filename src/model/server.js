@@ -53,18 +53,19 @@ class Server extends DB{
         let res = await this.ConnectDB(sql)
         return res;
     }
-    async addOne(tablename,fields,fieldValue){
-        let fieldsArray = fields.replace(" ","").split(",")
+    async addOne(tablename,fieldValue){
+        let fields = _.keys(fieldValue);
+        // let fieldsArray = fields.replace(" ","").split(",")
         let fieldValues=[];
-        fieldsArray.map(f=>{
+        fields.map(f=>{
             fieldValues.push("'"+fieldValue[f]+"'")
         })
         fieldValues.join(",")
         let updataValues = "ON DUPLICATE KEY UPDATE "
         function creatUpdataValues(){
-             fieldsArray.map((f,i)=>{
+            fields.map((f,i)=>{
                  if(i>0){
-                    updataValues += ""+f+"='"+fieldValue[f]+"'"+`${i===fieldsArray.length-1?'':','}`+""
+                    updataValues += ""+f+"='"+fieldValue[f]+"'"+`${i===fields.length-1?'':','}`+""
                  }
             })
         }

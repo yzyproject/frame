@@ -1,3 +1,4 @@
+const Upload = require("./upload");
 const Server = require("../model/server")
 const bodyParser = require('koa-bodyparser')
 const util = require("util");
@@ -5,6 +6,7 @@ const Com = require ( "./_common")
 const _ = require("underscore")
 let com = new Com()
 let server = new Server();
+let upload = new Upload();
 class IndexPage {
     constructor () {}
     async getFunctions ( ctx ) {
@@ -83,7 +85,7 @@ class IndexPage {
     }
     async addMenu( ctx ){
         let {options,fieldValue} = JSON.parse(ctx.request.body);
-        let result = await server.addOne("menu",options,fieldValue);
+        let result = await server.addOne("menu",fieldValue);
         ctx.response.body = result; 
     }
 
@@ -109,7 +111,14 @@ class IndexPage {
         }
         ctx.response.body = res; 
     }
-
-    
+    //上传图片
+    async UploadFile( ctx ){
+        upload.UploadImage( ctx )
+        let res = {
+            status:"success",
+            code:200
+        }
+        ctx.response.body = res; 
+    }
 }
 module.exports = IndexPage
