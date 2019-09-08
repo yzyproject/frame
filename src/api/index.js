@@ -88,19 +88,16 @@ class IndexPage {
         let result = await server.addOne("menu",fieldValue);
         ctx.response.body = result; 
     }
-
     async addMenuMany( ctx ){
         let {fieldValue} = JSON.parse(ctx.request.body);
         let result = await server.addMany("menu",fieldValue);
         ctx.response.body = result; 
     }
-
     async udateOne( ctx ){
         let {fieldValue,whereOption} = JSON.parse(ctx.request.body);
         let result = await server.udateOne("menu",fieldValue,whereOption);
         ctx.response.body = result; 
     }
-
     async getCurryMenu(ctx){
         let {options,filter,orderBy,startPops,limit} = JSON.parse(ctx.request.body);
         let result = await server.find("menu",options,filter,orderBy,startPops,limit);
@@ -120,5 +117,21 @@ class IndexPage {
         }
         ctx.response.body = res; 
     }
+    //删除菜单
+    async deleteMenu( ctx ){
+        let {id} = JSON.parse(ctx.request.body);
+        let whereOption = {
+            id:id,
+            parent_id:id
+        };
+        let result = await server.Delete("menu",whereOption);
+        result = {
+            status:"success",
+            code:200
+        }
+
+        ctx.response.body = result; 
+    }
+    
 }
 module.exports = IndexPage

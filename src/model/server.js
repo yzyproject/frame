@@ -126,5 +126,22 @@ class Server extends DB{
         }
         return result;
     }
+     //删除一条数据
+    async Delete(tablename,whereOpation){
+        let whereValue = "";
+        let whereKeys = _.keys(whereOpation);
+        let inserts = _.values(whereOpation);
+        inserts.unshift(tablename);
+        whereKeys.map((w,i)=>{
+            whereValue += `${w}='?'${i===whereKeys.length-1?"":" or "}`
+        })
+       let sql =`delete from ?? where ${whereValue}`;
+       sql = mysql.format(sql, inserts);
+       let res = await this.ConnectDB(sql);
+       let result = {
+           status:"success",
+           code:"200"
+       }
+    }
 }
 module.exports = Server;
