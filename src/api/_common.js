@@ -38,7 +38,6 @@ class Common{
          ,{
           expiresIn: 60*60*24 //到期时间
         });
-        let fields = "id,user_name,user_token";
         let values = {
             id:user.id,
             user_name:user.name,
@@ -53,7 +52,6 @@ class Common{
             statusCode:403,
             info:"未经允许禁止访问"
         };
-        console.log("1")
         return new Promise((resolve)=>{
             jwt.verify(token, config.tokenKey, async function (err, decoded) {
                 if (!err){
@@ -69,7 +67,6 @@ class Common{
                   if(token === (user_token[0]||{}).user_token || ""){
                     tokenStatus = true;
                     resolve(tokenStatus)
-                    console.log("2")
                   }else{
                     console.log("身份验证失败")
                     resolve(tokenCode)

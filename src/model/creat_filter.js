@@ -1,35 +1,35 @@
 class CreatFilter{
     rightLike(k,f,filters){
-        f = `${k} like '${filters.target}%'`
+        f = `${k} like ?`
         return f;
     }
     leftLike(k,f,filters){
-        f = `${k} like '%${filters.target}'`
+        f = `${k} like ?`
         return f;
     }
-    leftLike(k,f,filters){
-        f = `${k} like '%${filters.target}%'`
+    doubleLike(k,f,filters){
+        f = `${k} like ?`
         return f;
     }
     exceed(k,f,filters){
-        f = f + `${k} > '${filters.target}'`
+        f = f + `${k} > ?`
         return f;
     }
     exceedOrEqual(k,f,filters){
-        f = `${k} >= '${filters.target}'`
+        f = `${k} >= ?`
         return f;
     }
     below(k,f,filters){
-        f = `${k} < '${filters.target}'`
+        f = `${k} < ?`
         return f;
     }
     belowOrEqual(k,f,filters){
-        f = `${k} <= '${filters.target}'`
+        f = `${k} <= ?`
         return f;
     }
     between(k,f,filters){
         let fl = filters.fl.split(",")
-        f = `${k} between '${fl[1]} and ${fl[2]}'`
+        f = `${k} between?and?`
         return f;
     }
     execute(k,fnName,f,filters){
