@@ -170,5 +170,13 @@ class Server extends DB{
            code:"200"
        }
     }
+    //多功能SQL
+    async Query(sql){
+        let res = await this.ConnectDB(sql);
+        let result = {
+            status:"success",
+            code:"200"
+        }
+    }
 }
 module.exports = Server;
