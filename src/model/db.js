@@ -23,17 +23,26 @@ class DB{
             }
             //连接数据库
             function connect () {
-                var connection = mysql.createConnection(config.mysql); 
-                connection.connect(handleError);
-                connection.on('error', handleError);
-                connection.query(sql,function (err, result) {
-                if(err){
-                    console.log('[SELECT ERROR] - ',err.message);
-                    return;
+                const pool = mysql.createPool(config.mysql);
+                let query = function(sql,callback){  
+                    pool.getConnection(function(err,connection){
+                        if(err){
+                            console.log("=======err:",err);
+                        }  
+                        connection.query(sql,function(err,results){  
+                            callback(err, results) // 结果回调
+                            connection.release() // 释放连接资源 | 跟 connection.destroy() 不同，它是销毁
+                       })
+                    })
                 }
+                // 随机分配一个连接
+                pool.query(sql, function (err, result) {
+                    if(err){
+                        console.log('[SELECT ERROR] - ',err.message);
+                        return;
+                    }
                     resolve(result)
-                });
-                connection.end();
+                })
             }
             connect()
         })
