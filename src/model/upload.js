@@ -72,10 +72,11 @@ class RunUpload extends Upload{
             LocalUpload:new LocalUpload(ctx),
             OssUpload:new OssUpload(ctx)
         }
-        this.Change();
+        var upload_type = this.UploadType;
+        this.Change(upload_type);
     }
-    Change(){
-        this.CurryUpload = this.states[this.UploadType].UploadFile();
+    Change(upload_type){
+        this.CurryUpload = this.states[upload_type].UploadFile();
     }
 }
 module.exports = RunUpload;
