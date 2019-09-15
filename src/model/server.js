@@ -46,11 +46,11 @@ class Server extends DB{
                         f = f + creatFilter.execute(k,fl[filters[k].fl],f,filters[k]) + `${index===keys.length-1?'':' and '}`
                     }
                 }else if(filters[k].value){
-                    filterValues.push(`'${filters[k].value}'`)
+                    filterValues.push(`${filters[k].value}`)
                     f = f + `${k}=? ${index===keys.length-1?'':'and '}`
                 }else{
                     filterValues.push(`${filters[k]}`)
-                    f = f + `${k}=? ${index===keys.length-1?'':'and '}`
+                    f = f + `${k}=?${index===keys.length-1?'':'and '}`
                 }
             })
             if(limits){

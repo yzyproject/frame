@@ -1,4 +1,4 @@
-const Upload = require("./upload");
+const Upload = require("../model/upload");
 const Server = require("../model/server")
 const bodyParser = require('koa-bodyparser')
 const util = require("util");
@@ -6,7 +6,7 @@ const Com = require ( "./_common")
 const _ = require("underscore")
 let com = new Com()
 let server = new Server();
-let upload = new Upload();
+
 class IndexPage {
     constructor () {}
     async getFunctions ( ctx ) {
@@ -110,7 +110,7 @@ class IndexPage {
     }
     //上传图片
     async UploadFile( ctx ){
-        upload.UploadImage( ctx )
+        let upload = new Upload(ctx);
         let res = {
             status:"success",
             code:200
