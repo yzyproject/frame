@@ -6,12 +6,13 @@ const path = require("path");
 const Com = require ( "../api/_common");
 const OSS = require('ali-oss');
 const crypto = require('crypto');
+const config = require("../../config");
 let com = new Com()
 let server = new Server();
 class Upload{
     constructor(ctx){
         this.file = ctx.request.files.file;
-        this.UploadType = "OssUpload";
+        this.UploadType = config.upload_type;
     }
 }
 class LocalUpload extends Upload {
@@ -44,12 +45,7 @@ class OssUpload extends Upload{
         super(ctx);
     }
     async UploadFile(){
-        let client = new OSS({
-            region: 'oss-cn-beijing',
-            accessKeyId: 'LTAImtdqTNtyFo5T',
-            accessKeySecret: 'yTXzYEcrgGAKrEbCvpqoqq52bGGW1r',
-            bucket: 'mk-dev',
-        });
+        let client = new OSS(config.oss);
         const file2md5 = filename => {
             return new Promise((resv, rejc) => {
               let rs = fs.createReadStream(filename);

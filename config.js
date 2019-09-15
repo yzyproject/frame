@@ -9,6 +9,13 @@ const config= {
         password : '123456',       
         port: '3306',                   
         database: 'total' 
+    },
+    upload_type:"OssUpload",
+    oss:{
+        region: 'oss-cn-beijing',
+        accessKeyId: 'LTAImtdqTNtyFo5T',
+        accessKeySecret: 'yTXzYEcrgGAKrEbCvpqoqq52bGGW1r',
+        bucket: 'mk-dev',
     }
 }
 module.exports = config
