@@ -14,6 +14,16 @@ class Upload{
         this.file = ctx.request.files.file;
         this.UploadType = config.upload_type;
     }
+    file2md5(filename){
+        return new Promise((resv, rejc) => {
+            let rs = fs.createReadStream(filename);
+            let hash = crypto.createHash("md5");
+            rs.on("data", hash.update.bind(hash));
+            rs.on("end", function() {
+              resv(hash.digest("hex"));
+            });
+        });
+    }
 }
 class LocalUpload extends Upload {
     constructor(ctx){
@@ -65,12 +75,48 @@ class OssUpload extends Upload{
         console.log(result);
     } 
 }
+class MultipartUpload extends Upload{
+    constructor(ctx){
+        super(ctx);
+    }
+    async  UploadFile () {
+        let client = new OSS(config.oss);
+        try {
+            const progress = async function (p) {
+                console.log(p);
+            };
+             // 创建可读流
+            const reader = fs.createReadStream(this.file.path);
+            let md5 = await this.file2md5(this.file.path);
+            // 可读流通过管道写入可写流
+            let ext_name = path.extname(this.file.name);
+            let result = await client.multipartUpload(md5 + ext_name, this.file.path, {
+            progress,
+            meta: {
+                year: 2017,
+                people: 'test'
+            }
+        });
+        console.log(result);
+        let head = await client.head(md5 + ext_name);
+        console.log(head);
+        } catch (e) {
+         // 捕获超时异常
+          if (e.code === 'ConnectionTimeoutError') {
+            console.log("Woops,超时啦!");
+            // do ConnectionTimeoutError operation
+          }
+          console.log(e)
+        }
+      }
+}
 class RunUpload extends Upload{
     constructor(ctx){
         super(ctx);
         this.states = {
             LocalUpload:new LocalUpload(ctx),
-            OssUpload:new OssUpload(ctx)
+            OssUpload:new OssUpload(ctx),
+            MultipartUpload:new MultipartUpload(ctx)
         }
         var upload_type = this.UploadType;
         this.Change(upload_type);

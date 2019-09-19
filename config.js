@@ -10,12 +10,12 @@ const config= {
         port: '3306',                   
         database: 'total' 
     },
-    upload_type:"OssUpload",
+    upload_type:"MultipartUpload",
     oss:{
-        region: 'oss-cn-beijing',
-        accessKeyId: 'LTAImtdqTNtyFo5T',
-        accessKeySecret: 'yTXzYEcrgGAKrEbCvpqoqq52bGGW1r',
-        bucket: 'mk-dev',
+        region: 'oss-cn-hongkong',
+        accessKeyId: 'LTAI3KzAgEBoaJFH',
+        accessKeySecret: 'HfuZmQDArzXRefXLd78Su1qL6zYKqX',
+        bucket: 'oss-bases',
     }
 }
 module.exports = config
