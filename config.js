@@ -10,7 +10,7 @@ const config= {
         port: '3306',                   
         database: 'total' 
     },
-    upload_type:"MultipartUpload",
+    upload_type:"OssUpload",
     oss:{
         region: 'oss-cn-hongkong',
         accessKeyId: 'LTAI3KzAgEBoaJFH',
