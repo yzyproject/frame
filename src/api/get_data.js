@@ -32,5 +32,8 @@ class Data{
         let data = await this.pageMapObj[this.fn](ctx);
         ctx.response.body = data;
     }
+    addRedisCach(){
+        
+    }
 }
 module.exports = Data;
