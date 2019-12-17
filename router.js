@@ -5,8 +5,10 @@ const config = require("./config.js");
 const Com = require ( "./src/api/_common")
 const util = require("util");
 const jwt = require('jsonwebtoken');
+let redis = require("redis");
 let com = new Com();
 const Server = require("./src/model/server");
+const DT = require("./src/api/get_data");
 let server = new Server();
 module.exports = (app)=>{
   app.use(async (ctx,next)=>{
@@ -35,19 +37,26 @@ module.exports = (app)=>{
       ctx.response.body = `Hello api！`
     })
     router.post(path,async(ctx, next)=>{
-      if(pageMap.hasOwnProperty(url)){
+      if(pageMap.hasOwnProperty(url) ){
         let pageMapObj =  new pageMap[url]();
+        let dt = new DT(pageMapObj,fn);
         if(typeof pageMapObj[fn] === "function"){
           if(fn === "login"){
+            // dt.getDataFromDB(ctx);
             await pageMapObj[fn](ctx);
           }else{
             let token = ctx.header.authorization || ""
             token = token.replace(/\"/g,"")
-            let tokenStatus = await com.checkToken(token)
-            if(tokenStatus === true){
-              await pageMapObj[fn](ctx);
+            if(token === ""){
+              // await pageMapObj[fn](ctx);
+              dt.getDataFromDB(ctx);
             }else{
-              ctx.response.body = tokenStatus ;
+              let tokenStatus = await com.checkToken(token)
+              if(tokenStatus === true){
+                await dt.getDataFromDB(ctx);
+              }else{
+                ctx.response.body = tokenStatus ;
+              }
             }
           }
         }else{
